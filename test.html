@@ -1,57 +1,57 @@
 <!DOCTYPE HTML>
-<<span class="hljs-title">html></span>
-  <<span class="hljs-title">script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></span></<span class="hljs-title">script></span>
-<<span class="hljs-title">body></span>
-    <<span class="hljs-title">P></span>Set Servo Position:<<span class="hljs-title">br></span><<span class="hljs-title">br></span>
-    <<span class="hljs-title">input type="range" name="degBox" id="degBoxId" min="0" max="180" step="1" value="90" list="myData" onchange="setValue(this)"></span>
+<html>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+body>
+    <P>Set Servo Position:<br><br>
+    <input type="range" name="degBox" id="degBoxId" min="0" max="180" step="1" value="90" list="myData" onchange="setValue(this)">
     <!-- This adds the tick marks to the range but does not in Safari -->
-    <<span class="hljs-title">datalist id="myData"></span>
-       <<span class="hljs-title">option value="0"></span>
-       <<span class="hljs-title">option value="30"></span>
-       <<span class="hljs-title">option value="60"></span>
-       <<span class="hljs-title">option value="90"></span>
-       <<span class="hljs-title">option value="120"></span>
-       <<span class="hljs-title">option value="150"></span>
-       <<span class="hljs-title">option value="180"></span>
-    </<span class="hljs-title">datalist></span>
-    <<span class="hljs-title">br></span><<span class="hljs-title">br></span>
-    <<span class="hljs-title">button id="minusbutton" onclick="fineAdjust(-5)"></span>⇐ -5 °</<span class="hljs-title">button></span>
-    <<span class="hljs-title">button id="plusbutton"  onclick="fineAdjust(+5)"></span>+5 ° ⇒</<span class="hljs-title">button></span>
-    <<span class="hljs-title">br></span><<span class="hljs-title">br></span>
-    <<span class="hljs-title">P></span>Current Position: <<span class="hljs-title">span id="curPos"></span></<span class="hljs-title">span></span><<span class="hljs-title">br></span>
+    <datalist id="myData">
+       <option value="0">
+       <option value="30">
+       <option value="60">
+       <option value="90">
+       <option value="120">
+       <option value="150">
+       <option value="180">
+    </datalist>
+    <br><br>
+    <button id="minusbutton" onclick="fineAdjust(-5)">⇐ -5 °</button>
+    <button id="plusbutton"  onclick="fineAdjust(+5)">+5 ° ⇒</button>
+    <br><br>
+    <P>Current Position: <span id="curPos"></span><br>
 
-    <<span class="hljs-title">script type="text/javascript"></span>
-      <span class="hljs-keyword" style="font-weight: bold;">var deviceID    = "53ff6e065075535116151587";
+    <script type="text/javascript">
+      var deviceID    = "53ff6e065075535116151587";
       var accessToken = "dba42fdf82bc764b002c8c8943249977a8cc6b50";
       var setFunc = "setpos";
       var getFunc = "getpos";
 
-      window.setInterval(<span class="hljs-keyword" style="font-weight: bold;">function() </span>{
+      window.setInterval(function() {
         requestURL = "https://api.spark.io/v1/devices/" + deviceID + "/" + getFunc + "/?access_token=" + accessToken;
-        $.getJSON(requestURL, <span class="hljs-keyword" style="font-weight: bold;">function(json) </span>{
+        $.getJSON(requestURL, function(json) {
                  document.getElementById("curPos").innerHTML = json.result + "°";
                  document.getElementById("curPos").style.fontSize = "28px";
                  document.getElementById("degBoxId").value = parseInt(json.result);
                  });
       }, 1000);
 
-      <span class="hljs-keyword" style="font-weight: bold;">function setValue(obj) </span>{
+      function setValue(obj) {
         var newValue = document.getElementById('degBoxId').value;
         sparkSetPos(newValue);
       }
 
-      <span class="hljs-keyword" style="font-weight: bold;">function fineAdjust(value) </span>{
+      function fineAdjust(value) {
         var currentValue = parseInt(document.getElementById('curPos').innerHTML);
         var setValue = value + currentValue;
         sparkSetPos(setValue);
         document.getElementById("degBoxId").value = setValue;
       }
 
-      <span class="hljs-keyword" style="font-weight: bold;">function sparkSetPos(newValue) </span>{
+      function sparkSetPos(newValue) {
   var requestURL = "https://api.spark.io/v1/devices/" +deviceID + "/" + setFunc + "/";
         $.post( requestURL, { params: newValue, access_token: accessToken });
       }
 
-    </span></<span class="hljs-title">script></span>
-</<span class="hljs-title">body></span>
-</<span class="hljs-title">html></span><br>
+    </script>
+</body>
+</html><br>
